@@ -2,12 +2,12 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-
         <q-toolbar-title>
-          Quasar App
+          Lowfound OpenAI API Chat
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn @click="onDelete()">
+          Logout
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -18,8 +18,13 @@
 </template>
 
 <script setup>
+import { apiAxios } from 'src/boot/axios';
 
+function onDelete(){
+  apiAxios.delete("/questions")
+}
 </script>
 
 <style lang="scss">
+
 </style>
