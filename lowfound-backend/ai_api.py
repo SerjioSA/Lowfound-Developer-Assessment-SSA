@@ -1,5 +1,10 @@
 import openai
-openai.api_key = 'key'
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+openai.api_key = os.getenv('api-key')
+ 
 messages = [ {"role": "system", "content":
 			"You are a intelligent assistant."} ]
 def send_question(user_input):

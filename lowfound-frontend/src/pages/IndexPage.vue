@@ -76,11 +76,9 @@ function initiateData() {
 
 
 function onSendQuestion() {
-  const data = initiateData()
-  apiAxios.post("/ask-question", data);
-  // addLastCard()
+  getLastCard()
   question_text.value = " "
-  window.location.reload();
+  // window.location.reload();
 }
 
 function getCards() {
@@ -90,20 +88,21 @@ function getCards() {
     return data.value;
   });
 }
-
-async function addLastCard(){
-  const response = await getCards();
-  currentCards.value = response;
-
-  const i = response.length - 1
-  questionCards.value.push({
-    id: currentCards.value[i]["id"],
-    date: currentCards.value[i]["date"],
-    question: currentCards.value[i]["question"],
-    answer: currentCards.value[i]["answer"]
-    });
-    // scrollToBottom()
+function getLastCard() {
+  const data = initiateData()
+  apiAxios.post("/ask-question", data)
+  .then((response) => {
+    data.value  = response.data.data;
+    currentCards.value = data.value;
+    questionCards.value.push({
+      id: currentCards.value["id"],
+      date: currentCards.value["date"],
+      question: currentCards.value["question"],
+      answer: currentCards.value["answer"]
+      });
+  });
 }
+
 
 
 
