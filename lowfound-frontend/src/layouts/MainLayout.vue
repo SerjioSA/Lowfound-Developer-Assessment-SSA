@@ -5,7 +5,7 @@
         <q-toolbar-title>
           Lowfound OpenAI API Chat
         </q-toolbar-title>
-        <q-btn @click="onDelete()">
+        <q-btn v-if="$route.path == '/'"  @click="deleteToken()">
           Logout
         </q-btn>
       </q-toolbar>
@@ -19,10 +19,18 @@
 
 <script setup>
 import { apiAxios } from 'src/boot/axios';
+import { LocalStorage } from "quasar";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
-function onDelete(){
-  apiAxios.delete("/questions")
+function deleteToken(){
+  LocalStorage.remove("myString");
+
+  router.push("/auth").then(() => {
+    window.location.reload();
+   });
 }
+
 </script>
 
 <style lang="scss">

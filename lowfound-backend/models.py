@@ -20,8 +20,8 @@ class Item(Base):
     __tablename__ = "items"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
+    # title = Column(String, index=True)
+    # description = Column(String, index=True)
     date = Column(String, index=True)
     question  = Column(String, index=True)
     answer  = Column(String, index=True)

@@ -2,10 +2,10 @@ from pydantic import BaseModel
 
 
 class ItemBase(BaseModel):
-    title: str
-    description: str | None = None
-    date: str | None = None
-    question: str | None = None
+    # title: str | None = None
+    # description: str | None = None
+    date: str
+    question: str
     answer: str | None = None
 
 

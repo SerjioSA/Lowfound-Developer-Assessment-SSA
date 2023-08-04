@@ -59,26 +59,12 @@ app.add_middleware(
 
 questions = []
 
-# Add questions
-@app.post("/ask-question", tags=["questions"])
-async def add_question(card: dict) -> dict:
-    
-    last_id = 1
-    if (len(questions) != 0):
-        last_id = questions[ len(questions) - 1]['id'] 
-        
-    questions.append({ 
-        "id": last_id + 1,
-        "date":card['date'],
-        "question":card['question'],
-        "answer":ai_api.send_question(card['question'])}) 
-    
-    return { "data": questions[-1] }
 
-# Get all questions
-@app.get("/questions", tags=["todos"])
-async def get_questions() -> dict:
-    return { "data": questions }
+
+# # Get all questions
+# @app.get("/questions", tags=["todos"])
+# async def get_questions() -> dict:
+#     return { "data": questions }
 
 # # Get last question 
 # @app.get("/questions/last", tags=["todos"])
@@ -86,18 +72,14 @@ async def get_questions() -> dict:
 #     if (len(questions) > 0):
 #         return { "data": questions[-1] }
 
-# Delete all questions
-@app.delete("/questions")
-async def delete_item():
-    # Your code to delete the item with the given item_id
-    questions.clear()
-    return {"message": f"DB has been deleted"}
 
 
 class User(BaseModel):
     email: str
     username: str
     password: str
+class DeleteItem(BaseModel):
+    item_id: int
 
 
 
@@ -109,7 +91,7 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(token: str = Depends(oauth2_scheme),db: Session = Depends(get_db)):
     """Get current authenticated user"""
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -118,7 +100,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
             raise HTTPException(status_code=400, detail="Invalid token")
     except jwt.JWTError:
         raise HTTPException(status_code=400, detail="Invalid token")
-    user = get_user(username)
+    user = get_user(db=db,username = username)
     if user is None:
         raise HTTPException(status_code=400, detail="Invalid token")
     return user
@@ -174,7 +156,6 @@ async def register(user: User, db: Session = Depends(get_db)):
 @app.get("/users/{user_id}", response_model=schemas.User)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
-    
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
@@ -208,11 +189,51 @@ async def login(form_data: User,db: Session = Depends(get_db)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+# @app.post("/users/{user_id}/items/", response_model=schemas.Item)
+# def create_item_for_user(
+#     user_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)
+# ):
+#     last_item = crud.get_last_item(db=db)
+    
+#     new_id = 1
+#     if last_item:
+#         new_id = last_item.id + 1
+#     return crud.create_user_item(db=db, item=item, user_id=user_id)
+
+# Add questions
 @app.post("/users/{user_id}/items/", response_model=schemas.Item)
 def create_item_for_user(
-    user_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)
+    user_id: int,
+    item: schemas.ItemCreate,
+    db: Session = Depends(get_db)
 ):
-    return crud.create_user_item(db=db, item=item, user_id=user_id)
+    last_item = crud.get_last_item(db=db)
+    
+    new_item = schemas.ItemCreate(
+        date=item.date,
+        question=item.question,
+        answer=ai_api.send_question(item.question)
+    )
+        
+    return crud.create_user_item(db=db, item=new_item, user_id=user_id)
+    
+
+
+# @app.post("/ask-question", tags=["questions"])
+# async def add_question(card: dict) -> dict:
+    
+#     last_id = 1
+#     if (len(questions) != 0):
+#         last_id = questions[ len(questions) - 1]['id'] 
+        
+#     questions.append({ 
+#         "id": last_id + 1,
+#         "date":card['date'],
+#         "question":card['question'],
+#         "answer":}) 
+    
+#     return { "data": questions[-1] }
+
 
 
 @app.get("/users/{user_id}/items/", response_model=list[schemas.Item])
@@ -225,7 +246,30 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = crud.get_items(db, skip=skip, limit=limit)
     return items
 
+# Delete а question
+@app.delete("/items/delete/{item_id}/")
+def delete_item(item_id: int,db: Session = Depends(get_db)):
+    # Your code to delete the item with the given item_id
+    delete_item_id = item_id
+    crud.delete_item_by_id(db=db,item_id=delete_item_id)
+    return {"delted_id":delete_item_id}
 
+# Add questions
+@app.post("/users/{user_id}/items/", response_model=schemas.Item)
+def create_item_for_user(
+    user_id: int,
+    item: schemas.ItemCreate,
+    db: Session = Depends(get_db)
+):
+    last_item = crud.get_last_item(db=db)
+    
+    new_item = schemas.ItemCreate(
+        date=item.date,
+        question=item.question,
+        answer=ai_api.send_question(item.question)
+    )
+        
+    return crud.create_user_item(db=db, item=new_item, user_id=user_id)
 
 if __name__ == "__main__":
     uvicorn.run(app,host='0.0.0.0',port = 8000)

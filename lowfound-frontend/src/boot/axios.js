@@ -20,7 +20,7 @@ if (localStorage.getItem("myString")) {
     (config) => {
       const myString = LocalStorage.getItem("myString");
       if (myString) {
-        config.headers["Authorization"] = `Token ${myString}`;
+        config.headers["Authorization"] = `bearer ${myString}`;
         // console.log("token ok");
       }
       return config;
