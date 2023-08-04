@@ -5,9 +5,10 @@ Assesment for Lowfound comapny
 You need to create .env file in your project root with this fields:
 ```
 api-key =  <openapi-key>
-SECRET_KEY = 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+SECRET_KEY = <password-hash-key>
 ```
-You can get OpenAI API key following this [instruction](https://help.socialintents.com/article/188-how-to-find-your-openai-api-key-for-chatgpt)
+You can get <openapi-key> following this [instruction](https://help.socialintents.com/article/188-how-to-find-your-openai-api-key-for-chatgpt).
+You can generate  <password-hash-key> [here](https://emn178.github.io/online-tools/sha256.html)
 ### How to launch frontend
 
 Install [yarn](https://classic.yarnpkg.com/en/docs/install#windows-stable)
