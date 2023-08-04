@@ -8,7 +8,7 @@ api-key =  <openapi-key>
 SECRET_KEY = <password-hash-key>
 ```
 You can get openapi-key following this [instruction](https://help.socialintents.com/article/188-how-to-find-your-openai-api-key-for-chatgpt).
-You can generate  password-hash-key [here](https://emn178.github.io/online-tools/sha256.html)
+You can generate  password-hash-key [here](https://emn178.github.io/online-tools/sha256.html).
 ### How to launch frontend
 
 Install [yarn](https://classic.yarnpkg.com/en/docs/install#windows-stable)
