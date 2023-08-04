@@ -14,5 +14,5 @@ yarn quasar dev
 You need to have .env file in your project root with this fields:
 ```
 api-key =  <openapi-key>
-SECRET_KEY = <passwork-hash-key>
+SECRET_KEY = <password-hash-key>
 ```
