@@ -35,6 +35,12 @@ yarn quasar dev
 
 Go to /lowfound-backend
 
+Create virtual environment:
+
+```
+python3 -m venv venv
+```
+
 Install requirements from  requirements.txt:
 
 ```
