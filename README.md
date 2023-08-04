@@ -35,11 +35,24 @@ yarn quasar dev
 
 Go to /lowfound-backend
 
-Create virtual environment:
+Create a virtual environment:
 
 ```
 python3 -m venv venv
 ```
+
+* If you use Linux/macOS
+
+    ```
+    source venv/bin/activate
+    ```
+
+* if you use windows
+
+    ```
+    source venv/scripts/activate
+    ```
+
 
 Install requirements from  requirements.txt:
 
@@ -51,10 +64,6 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-
-```
-pip install -r requirements.txt
-```
 Launch backend
 ```
 uvicorn main:app --reload
