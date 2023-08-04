@@ -144,7 +144,7 @@ function sendComponentDataLogin() {
     .then((response) => {
       tokenData.value = response.data.access_token;
       LocalStorage.set("myString", tokenData.value);
-      console.log(tokenData.value)
+      // console.log(tokenData.value)
 
       router.push("/").then(() => {
         window.location.reload();
@@ -183,7 +183,7 @@ function sendComponentDataReg() {
       .then((response) => {
         tokenData.value = response.data.access_token;
         LocalStorage.set("myString", tokenData.value);
-        console.log(tokenData.value)
+        // console.log(tokenData.value)
 
         router.push("/").then(() => {
         window.location.reload();

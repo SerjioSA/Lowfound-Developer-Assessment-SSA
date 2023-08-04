@@ -97,7 +97,7 @@ function onSendQuestion() {
 function getCards() {
   return apiAxios.get("/questions").then((response) => {
     data.value  = response.data.data;
-    console.log(data.value);
+    // console.log(data.value);
     return data.value;
   });
 }
@@ -108,7 +108,7 @@ function getLastCard() {
 
   apiAxios.get("/users/me/").then((response) => {
     currentUserID.value  = response.data.id;
-    console.log(currentUserID.value)
+    // console.log(currentUserID.value)
     apiAxios.post(`/users/${currentUserID.value}/items/`, data)
     .then((response) => {
       data.value  = response.data;
@@ -119,8 +119,8 @@ function getLastCard() {
         question: currentCards.value["question"],
         answer: currentCards.value["answer"],
         onClick: () => {
-            console.log("Удаляемый объект")
-            console.log(currentCards.value["id"])
+            // console.log("Удаляемый объект")
+            // console.log(currentCards.value["id"])
             apiAxios.delete(`/items/delete/${currentCards.value["id"]}/`)
             questionCards.value.splice(questionCards.value.length-1, 1);
         }
@@ -138,14 +138,14 @@ function getLastCard() {
 function getQuestionCards() {
   apiAxios.get("/users/me/").then((response) => {
     currentUserID.value  = response.data.id;
-    console.log(currentUserID.value)
+    // console.log(currentUserID.value)
     apiAxios.get(`/users/${currentUserID.value}/items/`)
     .then((response) => {
       currentCards.value = response.data;
       const numCards = currentCards.value.length;
 
-      console.log(currentCards.value);
-      console.log(numCards);
+      // console.log(currentCards.value);
+      // console.log(numCards);
 
       for (let i = 0; i < numCards; i++) {
         questionCards.value.push({
@@ -154,8 +154,8 @@ function getQuestionCards() {
           question: currentCards.value[i]["question"],
           answer: currentCards.value[i]["answer"],
           onClick: () => {
-            console.log("Удаляемый объект")
-            console.log(questionCards.value[i]["id"])
+            // console.log("Удаляемый объект")
+            // console.log(questionCards.value[i]["id"])
             apiAxios.delete(`/items/delete/${questionCards.value[i]["id"]}/`)
             questionCards.value.splice(i, 1);
           }
